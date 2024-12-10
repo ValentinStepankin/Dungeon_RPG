@@ -1,6 +1,7 @@
 from config import DUNGEON_MAP
 from game.utils import *
 from game.game_actions import *
+from game.battle import attack_enemy
 
 
 def main():
@@ -8,7 +9,7 @@ def main():
     player = create_player(data['player'])
     dungeon = DUNGEON_MAP
     room_descriptions = generate_room_descriptions(data, dungeon)
-    enemies = generate_enemies(dungeon, data['enemies'])
+    enemies = generate_enemies(dungeon, data['enemies'], data['weapon'], data['armor'])
 
     print(f"Добро пожаловать в подземелье, {player.name}!")
     print(player.description)
@@ -23,7 +24,10 @@ def main():
         action = get_user_choice(actions)
 
         if action == "Атаковать" and current_room in enemies:
-            attack_enemy(enemies[current_room])
+            player_survived = attack_enemy(player, enemies[current_room])
+            if not player_survived:
+                print("Игра окончена.")
+                return
             del enemies[current_room]
             show_room_info = False
         else:

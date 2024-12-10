@@ -2,12 +2,12 @@ from game.game_actions import get_actions, handle_action
 from game.utils import create_enemy
 
 
-def test_get_actions(enemy_data):
+def test_get_actions(enemy_data, weapon_data, armor_data):
     # Проверка вариантов доступных действий в зависимости от типа комнаты
     dungeon = ['St', ' ', 'E', 'Ex']
 
     enemies = {
-        2: create_enemy(enemy_data)
+        2: create_enemy(enemy_data, weapon_data, armor_data)
     }
 
     # Тестирование комнаты "Стартовая" (St)

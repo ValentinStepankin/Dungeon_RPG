@@ -32,18 +32,41 @@ def test_create_player(player_data):
     assert player.death_description in player_data['death_description'], f"Описание смерти игрока должно быть одно из: {player_data['death_description']}"
 
 
-def test_create_enemy(enemy_data):
+def test_create_enemy(enemy_data, weapon_data, armor_data):
     # Проверка правильности создания противника с помощью функции create_enemy
-    enemy = create_enemy(enemy_data)
-    assert enemy.name in [enemy_data[0]['name'], enemy_data[1]['name'], enemy_data[2][
-        'name']], f"Имя врага должно быть одно из: {', '.join([enemy_data[0]['name'], enemy_data[1]['name'], enemy_data[2]['name']])}"
-    assert enemy.description in [enemy_data[0]['description'], enemy_data[1]['description'], enemy_data[2][
-        'description']], f"Описание врага должно быть одно из: {', '.join([enemy_data[0]['description'], enemy_data[1]['description'], enemy_data[2]['description']])}"
-    assert enemy.health in [enemy_data[0]['health'], enemy_data[1]['health'], enemy_data[2][
-        'health']], f"Здоровье врага должно быть одно из: {enemy_data[0]['health']}, {enemy_data[1]['health']}, {enemy_data[2]['health']}"
+    enemy = create_enemy(enemy_data, weapon_data, armor_data)
+
+    # Проверка, что имя врага соответствует одному из возможных
+    assert enemy.name in [enemy_data[0]['name'], enemy_data[1]['name'], enemy_data[2]['name']], \
+        f"Имя врага должно быть одно из: {', '.join([enemy_data[0]['name'], enemy_data[1]['name'], enemy_data[2]['name']])}"
+
+    # Проверка, что описание врага соответствует одному из возможных
+    assert enemy.description in [enemy_data[0]['description'], enemy_data[1]['description'],
+                                 enemy_data[2]['description']], \
+        f"Описание врага должно быть одно из: {', '.join([enemy_data[0]['description'], enemy_data[1]['description'], enemy_data[2]['description']])}"
+
+    # Проверка, что здоровье врага соответствует одному из возможных
+    assert enemy.health in [enemy_data[0]['health'], enemy_data[1]['health'], enemy_data[2]['health']], \
+        f"Здоровье врага должно быть одно из: {enemy_data[0]['health']}, {enemy_data[1]['health']}, {enemy_data[2]['health']}"
+
+    # Проверка, что описание смерти врага соответствует одному из возможных
     assert enemy.death_description in [enemy_data[0]['death_description'], enemy_data[1]['death_description'],
-                                       enemy_data[2][
-                                           'death_description']], f"Описание смерти врага должно быть одно из: {', '.join([enemy_data[0]['death_description'], enemy_data[1]['death_description'], enemy_data[2]['death_description']])}"
+                                       enemy_data[2]['death_description']], \
+        f"Описание смерти врага должно быть одно из: {', '.join([enemy_data[0]['death_description'], enemy_data[1]['death_description'], enemy_data[2]['death_description']])}"
+
+    # Проверка оружия врага
+    assert enemy.weapon['name'] in [weapon['name'] for weapon in weapon_data], \
+        f"Оружие врага должно быть одно из: {', '.join([weapon['name'] for weapon in weapon_data])}"
+    assert enemy.weapon['damage'] in [weapon['damage'] for weapon in weapon_data], \
+        f"Урон оружия врага должен быть один из: {', '.join([str(weapon['damage']) for weapon in weapon_data])}"
+    assert enemy.weapon['hit_chance'] in [weapon['hit_chance'] for weapon in weapon_data], \
+        f"Шанс попадания оружия врага должен быть один из: {', '.join([str(weapon['hit_chance']) for weapon in weapon_data])}"
+
+    # Проверка брони врага
+    assert enemy.armor['name'] in [armor['name'] for armor in armor_data], \
+        f"Броня врага должна быть одно из: {', '.join([armor['name'] for armor in armor_data])}"
+    assert enemy.armor['protection'] in [armor['protection'] for armor in armor_data], \
+        f"Защита брони врага должна быть одна из: {', '.join([str(armor['protection']) for armor in armor_data])}"
 
 
 def test_generate_room_descriptions(room_data):
@@ -59,10 +82,10 @@ def test_generate_room_descriptions(room_data):
         assert description in valid_descriptions, f"Описание комнаты '{description}' не найдено в списке допустимых описаний."
 
 
-def test_generate_enemies(enemy_data):
+def test_generate_enemies(enemy_data, weapon_data, armor_data):
     # Проверка генерации врагов для комнат 'E'
     dungeon = ['St', 'E',' ', 'E', 'Ex']
-    enemies = generate_enemies(dungeon, enemy_data)
+    enemies = generate_enemies(dungeon, enemy_data, weapon_data, armor_data)
     assert len(enemies) == 2, "Количество врагов должно быть 2"
     expected_enemy_indices = [1, 3]
     assert list(enemies.keys()) == expected_enemy_indices, f"Враги должны быть созданы только для комнат с индексами {expected_enemy_indices}"

@@ -43,16 +43,18 @@ def test_player_init(player_data):
     assert player.death_description == player_info['death_description']
 
 
-def test_enemy_init(enemy_data):
+def test_enemy_init(enemy_data, weapon_data, armor_data):
     # Случайный выбор врага из фикстуры
     enemy_info = random.choice(enemy_data)
+    weapon_info = random.choice(weapon_data)
+    armor_info = random.choice(armor_data)
 
     enemy = Enemy(
         enemy_info['name'],
         enemy_info['description'],
         enemy_info['health'],
-        None,
-        None,
+        weapon_info,
+        armor_info,
         enemy_info['death_description']
     )
 
@@ -60,6 +62,17 @@ def test_enemy_init(enemy_data):
     assert enemy.name == enemy_info['name']
     assert enemy.description == enemy_info['description']
     assert enemy.health == enemy_info['health']
+
+    # Проверяем оружие врага
+    assert enemy.weapon['name'] == weapon_info['name']
+    assert enemy.weapon['description'] == weapon_info['description']
+    assert enemy.weapon['damage'] == weapon_info['damage']
+    assert enemy.weapon['hit_chance'] == weapon_info['hit_chance']
+
+    # Проверяем броню врага
+    assert enemy.armor['name'] == armor_info['name']
+    assert enemy.armor['description'] == armor_info['description']
+    assert enemy.armor['protection'] == armor_info['protection']
 
     # Проверяем описание смерти
     assert enemy.death_description == enemy_info['death_description']

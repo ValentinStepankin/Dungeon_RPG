@@ -23,8 +23,3 @@ def handle_action(action, current_room):
         print("Вы успешно вышли из подземелья. Конец игры.")
         return -1
     return current_room
-
-
-def attack_enemy(enemy):
-    print(f"Вы атакуете врага {enemy.name}. Враг повержен!")
-    print(enemy.death_description)

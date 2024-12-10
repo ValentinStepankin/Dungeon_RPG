@@ -28,14 +28,16 @@ def create_player(player_data):
     )
 
 
-def create_enemy(enemy_data):
+def create_enemy(enemy_data, weapons, armors):
     enemy_info = random.choice(enemy_data)
+    weapon = random.choice(weapons)
+    armor = random.choice(armors)
     return Enemy(
         name=enemy_info['name'],
         description=enemy_info['description'],
         health=enemy_info['health'],
-        weapon=None,
-        armor=None,
+        weapon=weapon,
+        armor=armor,
         death_description=enemy_info['death_description']
     )
 
@@ -44,9 +46,9 @@ def generate_room_descriptions(data, dungeon):
     return {i: random.choice(data['rooms']) for i in range(len(dungeon))}
 
 
-def generate_enemies(dungeon, enemy_data):
+def generate_enemies(dungeon, enemy_data, weapons, armors):
     return {
-        index: create_enemy(enemy_data)
+        index: create_enemy(enemy_data, weapons, armors)
         for index, room in enumerate(dungeon)
         if room == 'E'
     }
